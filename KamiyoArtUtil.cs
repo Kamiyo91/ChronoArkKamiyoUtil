@@ -104,6 +104,7 @@ namespace _1ChronoArkKamiyoUtil
 
             AddressableLoadManager.LoadAsyncAction(path5, AddressableLoadManager.ManageType.Stage,
                 gameObject2.transform.Find("Char").GetComponent<SpriteRenderer>());
+            gameObject2.transform.Rotate(60, 0, 0);
             gameObject2.transform.Find("Light").gameObject.SetActive(false);
             instance.PartyMember_SK[num].gameObject.SetActive(false);
         }
@@ -129,6 +130,8 @@ namespace _1ChronoArkKamiyoUtil
 
             AddressableLoadManager.LoadAsyncAction(path5, AddressableLoadManager.ManageType.Stage,
                 gameObject2.transform.Find("Char").GetComponent<SpriteRenderer>());
+            gameObject2.transform.Rotate(60, 0, 0);
+            gameObject2.transform.Find("Char").rotation.Set(0, 0, 0, 0);
             gameObject2.transform.Find("Light").gameObject.SetActive(false);
             instance.PartyMember_SK[num].gameObject.SetActive(false);
         }
@@ -154,6 +157,8 @@ namespace _1ChronoArkKamiyoUtil
 
             AddressableLoadManager.LoadAsyncAction(path5, AddressableLoadManager.ManageType.Stage,
                 gameObject2.transform.Find("Char").GetComponent<SpriteRenderer>());
+            gameObject2.transform.Rotate(60, 0, 0);
+            gameObject2.transform.Find("Char").rotation.Set(0, 0, 0, 0);
             gameObject2.transform.Find("Light").gameObject.SetActive(false);
             instance.PartyMember_SK[num].gameObject.SetActive(false);
         }
