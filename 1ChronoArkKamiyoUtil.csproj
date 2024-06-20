@@ -315,7 +315,7 @@
     <Compile Include="KamiyoModels.cs" />
     <Compile Include="KamiyoUtil.cs" />
     <Compile Include="MainHarmonyPatch.cs" />
-    <Compile Include="ModChronoArkMainPlugin.cs" />
+    <Compile Include="KamiyoUtilModChronoArk_Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

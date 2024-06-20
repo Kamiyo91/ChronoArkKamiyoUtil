@@ -3,7 +3,7 @@ using HarmonyLib;
 
 namespace _1ChronoArkKamiyoUtil
 {
-    public class YaeMod21341_Plugin : ChronoArkPlugin
+    public class KamiyoUtilModChronoArk_Plugin : ChronoArkPlugin
     {
         private Harmony _harmony;
 
