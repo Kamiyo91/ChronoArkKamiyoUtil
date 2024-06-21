@@ -314,6 +314,7 @@
     <Compile Include="KamiyoGlobalModParameters.cs" />
     <Compile Include="KamiyoModels.cs" />
     <Compile Include="KamiyoUtil.cs" />
+    <Compile Include="KamiyoUtilExtensions.cs" />
     <Compile Include="MainHarmonyPatch.cs" />
     <Compile Include="KamiyoUtilModChronoArk_Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
