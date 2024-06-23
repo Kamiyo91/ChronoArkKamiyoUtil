@@ -7,6 +7,8 @@ namespace _1ChronoArkKamiyoUtil
     {
         public static Dictionary<string, List<DialogueFinder>> DialogueTrees =
             new Dictionary<string, List<DialogueFinder>>();
+
+        public static List<string> VFXSkillHide = new List<string>();
     }
 
     public class DialogueFinder

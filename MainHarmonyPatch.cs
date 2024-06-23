@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ChronoArkMod;
 using HarmonyLib;
+using Object = UnityEngine.Object;
 
 namespace _1ChronoArkKamiyoUtil
 {
@@ -63,6 +65,16 @@ namespace _1ChronoArkKamiyoUtil
                     else KamiyoArtUtil.PrepareBlankDialogue(instance, Num, KeyData);
                     break;
             }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SkillParticle), nameof(SkillParticle.init), typeof(Skill), typeof(BattleChar),
+            typeof(List<BattleChar>))]
+        public static void SkillParticle_init(SkillParticle __instance, Skill skill, BattleChar User,
+            List<BattleChar> Target)
+        {
+            if (!KamiyoGlobalModParameters.VFXSkillHide.Contains(skill.MySkill.KeyID)) return;
+            foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
         }
     }
 }
