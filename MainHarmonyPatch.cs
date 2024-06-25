@@ -16,9 +16,11 @@ namespace _1ChronoArkKamiyoUtil
         [HarmonyPatch(typeof(MasterSDMap), nameof(MasterSDMap.PartySpine))]
         [HarmonyPatch(typeof(MasterSDMap2), nameof(MasterSDMap2.PartySpine))]
         [HarmonyPatch(typeof(MasterSDMap3), nameof(MasterSDMap2.PartySpine))]
-        public static void InstanceMap_Start(object __instance, int Num, string KeyData)
+        public static void InstanceMap_PartySpine(object __instance, int Num, string KeyData)
         {
-            if (!ModManager.IsModAddedGDE(PlayData.TSavedata.Party[Num].KeyData)) return;
+            if (PlayData.TSavedata == null || PlayData.TSavedata.Party == null ||
+                !PlayData.TSavedata.Party.IsSafeAccess(Num) ||
+                !ModManager.IsModAddedGDE(PlayData.TSavedata.Party[Num].KeyData)) return;
             var tryGetDialogs = KamiyoGlobalModParameters.DialogueTrees.TryGetValue(KeyData, out var dialogueItem);
             DialogueFinder item;
             if (!tryGetDialogs) return;
@@ -73,7 +75,9 @@ namespace _1ChronoArkKamiyoUtil
         public static void SkillParticle_init(SkillParticle __instance, Skill skill, BattleChar User,
             List<BattleChar> Target)
         {
-            if (!KamiyoGlobalModParameters.VFXSkillHide.Contains(skill.MySkill.KeyID)) return;
+            if (skill?.MySkill == null || string.IsNullOrEmpty(skill.MySkill.KeyID) ||
+                __instance.SpacialCGMainCharacter == null ||
+                !KamiyoGlobalModParameters.VFXSkillHide.Contains(skill.MySkill.KeyID)) return;
             foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
         }
     }

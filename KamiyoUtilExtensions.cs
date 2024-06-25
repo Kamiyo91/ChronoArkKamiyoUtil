@@ -86,5 +86,10 @@ namespace _1ChronoArkKamiyoUtil
             skill.isExcept = isExcept;
             return skill;
         }
+
+        public static bool IsSafeAccess<T>(this IList<T> list, int index)
+        {
+            return index >= 0 && index < list.Count;
+        }
     }
 }
