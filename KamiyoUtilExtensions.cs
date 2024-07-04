@@ -106,10 +106,10 @@ namespace _1ChronoArkKamiyoUtil
                     return "Particle/Hein/Hein_CutEffect";
                 case VFXPathEnum.Sizz:
                     return "Particle/Sizz/Sizz_Attack_0";
-                //case VFXPathEnum.Trisha:
-                //    return "Particle/Trisha/Trisha_1_CutAni";
-                //case VFXPathEnum.Pressel:
-                //    return "Particle/Priest/Priest_CutEffect";
+                case VFXPathEnum.Trisha:
+                    return "Particle/Trisha/Trisha_1_CutAni";
+                case VFXPathEnum.Pressel:
+                    return "Particle/Priest/Priest_CutEffect";
                 case VFXPathEnum.SilverStein:
                     return "Particle/SilverStein/Silver_1_CutAni";
                 case VFXPathEnum.Johan:
@@ -118,12 +118,12 @@ namespace _1ChronoArkKamiyoUtil
                     return "Particle/Twins/TW_Red_CutAni_0";
                 case VFXPathEnum.Ilya:
                     return "Particle/Ilya/Ilya_2_Cutani_0";
-                //case VFXPathEnum.Leryn:
-                //    return "Particle/Leryn/Leryn_CutAni_0";
+                case VFXPathEnum.Leryn:
+                    return "Particle/Leryn/Leryn_CutAni_0";
                 case VFXPathEnum.Momori:
                     return "Particle/Momori/Momori_2";
-                //case VFXPathEnum.IronHeart:
-                //    return "Particle/IronHeart/Iron_CutEffect";
+                case VFXPathEnum.IronHeart:
+                    return "Particle/IronHeart/Iron_CutEffect";
                 case VFXPathEnum.Charon:
                     return "Particle/Charon/Charon_CutAni_0";
                 case VFXPathEnum.Huz:
@@ -132,6 +132,19 @@ namespace _1ChronoArkKamiyoUtil
                     return "Particle/Control/Control_0_CutAni";
                 default:
                     return string.Empty;
+            }
+        }
+
+        public static bool SpecialCaseVFXClone(this VFXPathEnum value)
+        {
+            switch (value)
+            {
+                case VFXPathEnum.Trisha:
+                    return true;
+                case VFXPathEnum.Leryn:
+                    return true;
+                default:
+                    return false;
             }
         }
     }

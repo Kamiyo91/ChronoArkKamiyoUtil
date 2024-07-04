@@ -79,25 +79,33 @@ namespace _1ChronoArkKamiyoUtil
             if (skill?.MySkill == null || string.IsNullOrEmpty(skill.MySkill.KeyID)) return;
             var modifier =
                 KamiyoGlobalModParameters.VFXSkillModifier.FirstOrDefault(x => x.SkillId == skill.MySkill.KeyID);
-            if (modifier == null) return;
+            if (modifier == null || (!string.IsNullOrEmpty(modifier.CustomSkin) && !SaveManager.NowData.EnableSkins.Any(
+                    x =>
+                        x.charKey == User.Info.KeyData && x.skinKey == modifier.CustomSkin))) return;
             if (modifier.IsRemoval)
             {
                 foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
                 return;
             }
 
-            if (!string.IsNullOrEmpty(modifier.CustomSkin) && !SaveManager.NowData.EnableSkins.Any(x =>
-                    x.charKey == User.Info.KeyData && x.skinKey == modifier.CustomSkin)) return;
             var assetInfo = ModManager.getModInfo(modifier.ModId).assetInfo;
-            var imageObj = __instance.SpacialCGMainCharacter.FirstOrDefault(x => x.name == "AzarMotion");
+            var image = KamiyoUtil.GetImagePath(assetInfo, modifier.Path, modifier.Pos, modifier);
+            var modImageInfo = assetInfo.ModImageInfos.FirstOrDefault(x => x.Key == image);
+            var imageObj = __instance.SpacialCGMainCharacter.Where(x => x.name.Contains("AzarMotion"));
             if (modifier.NeedClone)
             {
                 var path = modifier.VFXClonedEnum.GetVFXPathByEnum();
                 if (string.IsNullOrEmpty(path)) return;
-                var enemy = Target.FirstOrDefault() as BattleEnemy;
-                if (enemy == null) return;
-                var vector = new Vector3(enemy.MyUIObject.custom.Center.parent.position.x,
-                    enemy.MyUIObject.custom.Center.parent.position.y, enemy.MyUIObject.custom.Center.parent.position.z);
+                var vector = Vector3.zero;
+                if (!Target[0].Info.Ally)
+                {
+                    var enemy = Target.FirstOrDefault() as BattleEnemy;
+                    if (enemy == null) return;
+                    vector = new Vector3(enemy.MyUIObject.custom.Center.parent.position.x,
+                        enemy.MyUIObject.custom.Center.parent.position.y,
+                        enemy.MyUIObject.custom.Center.parent.position.z);
+                }
+
                 var imageObj2 =
                     AddressableLoadManager.Instantiate(path, AddressableLoadManager.ManageType.Battle, vector);
                 if (modifier.RemoveBaseCloneEffects)
@@ -107,21 +115,25 @@ namespace _1ChronoArkKamiyoUtil
                         Object.Destroy(obj);
                 }
 
+                if (modifier.VFXClonedEnum.SpecialCaseVFXClone())
+                    foreach (var component in imageObj2.GetComponentsInChildren<SpriteRenderer>(true)
+                                 .Where(x => x.name.Contains("phoenix")))
+                        component.sprite = modImageInfo.Value.Get();
                 var spComponent = imageObj2.GetComponent<SkillParticle>();
                 __instance.SpacialCGMainCharacter = spComponent.SpacialCGMainCharacter;
                 __instance.SpacialCGCam = spComponent.SpacialCGCam;
                 __instance.IsSpacialCG = true;
                 __instance.GroundOut = true;
-                imageObj = __instance.SpacialCGMainCharacter.FirstOrDefault(x => x.name == "AzarMotion");
+                imageObj = __instance.SpacialCGMainCharacter.Where(x => x.name.Contains("AzarMotion"));
             }
 
-            if (imageObj == null) return;
-            var image = KamiyoUtil.GetImagePath(assetInfo, modifier.Path, modifier.Pos, modifier);
-            var modImageInfo = assetInfo.ModImageInfos.FirstOrDefault(x => x.Key == image);
-            var components = imageObj.GetComponents<SpriteRenderer>();
-            var componentsChildren = imageObj.GetComponentsInChildren<SpriteRenderer>(true);
-            foreach (var component in componentsChildren) component.sprite = modImageInfo.Value.Get();
-            foreach (var component in components) component.sprite = modImageInfo.Value.Get();
+            foreach (var obj in imageObj)
+            {
+                foreach (var component in obj.GetComponentsInChildren<SpriteRenderer>(true))
+                    component.sprite = modImageInfo.Value.Get();
+                foreach (var component in obj.GetComponents<SpriteRenderer>())
+                    component.sprite = modImageInfo.Value.Get();
+            }
         }
     }
 }
