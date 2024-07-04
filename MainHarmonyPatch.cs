@@ -77,11 +77,12 @@ namespace _1ChronoArkKamiyoUtil
             List<BattleChar> Target)
         {
             if (skill?.MySkill == null || string.IsNullOrEmpty(skill.MySkill.KeyID)) return;
-            var modifier =
-                KamiyoGlobalModParameters.VFXSkillModifier.FirstOrDefault(x => x.SkillId == skill.MySkill.KeyID);
-            if (modifier == null || (!string.IsNullOrEmpty(modifier.CustomSkin) && !SaveManager.NowData.EnableSkins.Any(
-                    x =>
-                        x.charKey == User.Info.KeyData && x.skinKey == modifier.CustomSkin))) return;
+            var skinData = SaveManager.NowData.EnableSkins.FirstOrDefault(x => x.charKey == User.Info.KeyData);
+            var modifier = !string.IsNullOrEmpty(skinData.skinKey)
+                ? KamiyoGlobalModParameters.VFXSkillModifier.FirstOrDefault(x =>
+                    x.SkillId == skill.MySkill.KeyID && x.CustomSkin == skinData.skinKey)
+                : KamiyoGlobalModParameters.VFXSkillModifier.FirstOrDefault(x => x.SkillId == skill.MySkill.KeyID);
+            if (modifier == null) return;
             if (modifier.IsRemoval)
             {
                 foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
