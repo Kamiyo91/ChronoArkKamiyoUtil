@@ -2,6 +2,7 @@
 using System.Linq;
 using ChronoArkMod;
 using HarmonyLib;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace _1ChronoArkKamiyoUtil
@@ -75,10 +76,52 @@ namespace _1ChronoArkKamiyoUtil
         public static void SkillParticle_init(SkillParticle __instance, Skill skill, BattleChar User,
             List<BattleChar> Target)
         {
-            if (skill?.MySkill == null || string.IsNullOrEmpty(skill.MySkill.KeyID) ||
-                __instance.SpacialCGMainCharacter == null ||
-                !KamiyoGlobalModParameters.VFXSkillHide.Contains(skill.MySkill.KeyID)) return;
-            foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
+            if (skill?.MySkill == null || string.IsNullOrEmpty(skill.MySkill.KeyID)) return;
+            var modifier =
+                KamiyoGlobalModParameters.VFXSkillModifier.FirstOrDefault(x => x.SkillId == skill.MySkill.KeyID);
+            if (modifier == null) return;
+            if (modifier.IsRemoval)
+            {
+                foreach (var obj in __instance.SpacialCGMainCharacter) Object.Destroy(obj);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(modifier.CustomSkin) && !SaveManager.NowData.EnableSkins.Any(x =>
+                    x.charKey == User.Info.KeyData && x.skinKey == modifier.CustomSkin)) return;
+            var assetInfo = ModManager.getModInfo(modifier.ModId).assetInfo;
+            var imageObj = __instance.SpacialCGMainCharacter.FirstOrDefault(x => x.name == "AzarMotion");
+            if (modifier.NeedClone)
+            {
+                var path = modifier.VFXClonedEnum.GetVFXPathByEnum();
+                if (string.IsNullOrEmpty(path)) return;
+                var enemy = Target.FirstOrDefault() as BattleEnemy;
+                if (enemy == null) return;
+                var vector = new Vector3(enemy.MyUIObject.custom.Center.parent.position.x,
+                    enemy.MyUIObject.custom.Center.parent.position.y, enemy.MyUIObject.custom.Center.parent.position.z);
+                var imageObj2 =
+                    AddressableLoadManager.Instantiate(path, AddressableLoadManager.ManageType.Battle, vector);
+                if (modifier.RemoveBaseCloneEffects)
+                {
+                    foreach (var obj in imageObj2.GetComponentsInChildren<ParticleSystem>(true)) Object.Destroy(obj);
+                    foreach (var obj in imageObj2.GetComponentsInChildren<ParticleSystemRenderer>(true))
+                        Object.Destroy(obj);
+                }
+
+                var spComponent = imageObj2.GetComponent<SkillParticle>();
+                __instance.SpacialCGMainCharacter = spComponent.SpacialCGMainCharacter;
+                __instance.SpacialCGCam = spComponent.SpacialCGCam;
+                __instance.IsSpacialCG = true;
+                __instance.GroundOut = true;
+                imageObj = __instance.SpacialCGMainCharacter.FirstOrDefault(x => x.name == "AzarMotion");
+            }
+
+            if (imageObj == null) return;
+            var image = KamiyoUtil.GetImagePath(assetInfo, modifier.Path, modifier.Pos, modifier);
+            var modImageInfo = assetInfo.ModImageInfos.FirstOrDefault(x => x.Key == image);
+            var components = imageObj.GetComponents<SpriteRenderer>();
+            var componentsChildren = imageObj.GetComponentsInChildren<SpriteRenderer>(true);
+            foreach (var component in componentsChildren) component.sprite = modImageInfo.Value.Get();
+            foreach (var component in components) component.sprite = modImageInfo.Value.Get();
         }
     }
 }

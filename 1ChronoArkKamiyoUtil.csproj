@@ -318,6 +318,7 @@
     <Compile Include="MainHarmonyPatch.cs" />
     <Compile Include="KamiyoUtilModChronoArk_Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VFXPathEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <Publicize Include="Assembly-CSharp" />

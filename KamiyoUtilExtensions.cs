@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _1ChronoArkKamiyoUtil
 {
@@ -90,6 +90,49 @@ namespace _1ChronoArkKamiyoUtil
         public static bool IsSafeAccess<T>(this IList<T> list, int index)
         {
             return index >= 0 && index < list.Count;
+        }
+
+        public static string GetVFXPathByEnum(this VFXPathEnum value)
+        {
+            switch (value)
+            {
+                case VFXPathEnum.Lian:
+                    return "Particle/Lian/Lian_CutEffect";
+                case VFXPathEnum.Azar:
+                    return "Particle/Azar/Azar_1_NewAni";
+                case VFXPathEnum.MissChain:
+                    return "Particle/Miss/MissChain_Cutani_0";
+                case VFXPathEnum.Hein:
+                    return "Particle/Hein/Hein_CutEffect";
+                case VFXPathEnum.Sizz:
+                    return "Particle/Sizz/Sizz_Attack_0";
+                //case VFXPathEnum.Trisha:
+                //    return "Particle/Trisha/Trisha_1_CutAni";
+                //case VFXPathEnum.Pressel:
+                //    return "Particle/Priest/Priest_CutEffect";
+                case VFXPathEnum.SilverStein:
+                    return "Particle/SilverStein/Silver_1_CutAni";
+                case VFXPathEnum.Johan:
+                    return "Particle/Johan/Johan_CutAni_0";
+                case VFXPathEnum.Selia:
+                    return "Particle/Twins/TW_Red_CutAni_0";
+                case VFXPathEnum.Ilya:
+                    return "Particle/Ilya/Ilya_2_Cutani_0";
+                //case VFXPathEnum.Leryn:
+                //    return "Particle/Leryn/Leryn_CutAni_0";
+                case VFXPathEnum.Momori:
+                    return "Particle/Momori/Momori_2";
+                //case VFXPathEnum.IronHeart:
+                //    return "Particle/IronHeart/Iron_CutEffect";
+                case VFXPathEnum.Charon:
+                    return "Particle/Charon/Charon_CutAni_0";
+                case VFXPathEnum.Huz:
+                    return "Particle/Queen/Huz_CutEffect";
+                case VFXPathEnum.Narhan:
+                    return "Particle/Control/Control_0_CutAni";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

@@ -41,9 +41,13 @@ namespace _1ChronoArkKamiyoUtil
             return modInfo.assetInfo.ConstructObjectByCode(dialogue);
         }
 
-        public static string GetImagePath(ModAssetInfo assetInfo, string path, Vector2 pos)
+        public static string GetImagePath(ModAssetInfo assetInfo, string path, Vector2 pos,
+            VFXSkillModifier modifier = null)
         {
-            return assetInfo.ChangeSpritePivot(assetInfo.ImageFromFile(path), pos);
+            if (modifier == null) return assetInfo.ChangeSpritePivot(assetInfo.ImageFromFile(path), pos);
+            if (string.IsNullOrEmpty(modifier.ImageId))
+                modifier.ImageId = assetInfo.ChangeSpritePivot(assetInfo.ImageFromFile(path), pos);
+            return modifier.ImageId;
         }
 
         public static void IncreaseEnemyActionCountByValue(int value, bool allEnemies = true, BattleChar target = null)
